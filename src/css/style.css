@@ -1,0 +1,103 @@
+section {
+  background-color: rgb(224, 178, 224);
+}
+.container {
+  width: 1170px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: 0 auto;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+}
+
+input {
+  border-radius: 3px;
+}
+
+button {
+  display: block;
+  justify-content: center;
+}
+
+#sentinel {
+  width: 500px;
+  height: 500px;
+  background-color: tomato;
+}
+
+.search-input {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background-color: rgb(228, 202, 241);
+  font-family: 'Satisfy', cursive;
+  font-size: 20;
+  margin-right: 10px;
+}
+
+.search-button {
+  border-radius: 8px;
+  font-family: 'Satisfy', cursive;
+  font-size: 20;
+  background-color: rgb(157, 104, 172);
+  padding: 5px 10px;
+  color: rgb(226, 205, 240);
+  cursor: pointer;
+}
+
+.search-button:focus,
+.search-button:hover {
+  cursor: pointer;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 15%);
+}
+
+.search-input:focus,
+.search-input:hover {
+  outline: transparent;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 15%);
+}
+.gallery {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.load-more {
+  margin: 0 auto;
+  border-radius: 8px;
+  font-family: 'Satisfy', cursive;
+  font-size: 20;
+  background-color: rgb(157, 104, 172);
+  padding: 10px 20px;
+  color: rgb(226, 205, 240);
+  cursor: pointer;
+}
+
+.info {
+  display: flex;
+  background-color: rgb(181, 144, 216);
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.info-item {
+  font-family: 'Satisfy', cursive;
+  font-size: 15px;
+  color: rgb(226, 205, 240);
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  display: flex;
+}
+
+.photo-card {
+  box-shadow: 8px 6px 5px rgb(202 204 188 / 76%);
+  border-radius: 15px;
+  cursor: pointer;
+}
+.photo-card:hover {
+  transform: scale(1.2);
+}

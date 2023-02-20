@@ -12,8 +12,7 @@ export default class PixabayApiService {
     return fetch(URL)
       .then(r => r.json())
       .then(data => {
-        this.incrementPage();
-        return data.hits;
+        return data;
       });
     // const response = await axios.get(URL);
     // const data = await response.json();

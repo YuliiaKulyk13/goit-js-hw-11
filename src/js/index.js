@@ -32,35 +32,19 @@ function onSearch(e) {
     clearContainer();
     return;
   } else {
-    PixabayApiService.fetchPictures().then(appendImagesMarkup);
-    appendImagesMarkup(hits);
-    PixabayApiService.resetPage();
-    PixabayApiService.incrementPage();
-    observer.observe(sentinel);
+    PixabayApiService.fetchPictures().then(images => {
+      appendImagesMarkup(images.hits);
+      PixabayApiService.resetPage();
+      PixabayApiService.incrementPage();
+      observer.observe(sentinel);
 
-    Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+      Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
+    });
   }
-
-  // PixabayApiService.fetchPictures().then(hits => {
-  //   clearContainer();
-  //   appendImagesMarkup(hits);
 }
 
-// if (!PixabayApiService.query) {
-//   return;
-// }
-//   PixabayApiService.resetPage();
-//   PixabayApiService.fetchPictures().then(data => {
-//     if (data.length === 0 || PixabayApiService.query === '') {
-//
-//       PixabayApiService.resetPage();
-//       clearContainer();
-//       return;
-//
-//
-
-function appendImagesMarkup(hits) {
-  const galleryItem = hits
+function appendImagesMarkup(images) {
+  const galleryItem = images.hits
     .map(
       ({
         webformatURL,

@@ -6,16 +6,16 @@ export default class PixabayApiService {
     this.page = 1;
   }
 
-  fetchPictures() {
+  async fetchPictures() {
     const URL = `https://pixabay.com/api/?key=33700008-b0f3fc2623c0687ada0dd2d9b&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`;
-    // return fetch(URL);
-    return fetch(URL)
-      .then(r => r.json())
-      .then(data => {
-        return data;
-      });
-    // const response = await axios.get(URL);
-    // const data = await response.json();
+
+    return await axios.get(URL).then(response => {
+      if (response.status !== 200 || response.data.hits.length === 0) {
+        throw new Error(response.status);
+      }
+
+      return response.data;
+    });
   }
 
   incrementPage() {

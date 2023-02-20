@@ -32,19 +32,25 @@ function onSearch(e) {
     clearContainer();
     return;
   } else {
-    PixabayApiService.fetchPictures().then(images => {
-      appendImagesMarkup(images.hits);
-      PixabayApiService.resetPage();
-      PixabayApiService.incrementPage();
-      observer.observe(sentinel);
+    PixabayApiService.fetchPictures()
+      .then(images => {
+        appendImagesMarkup(images.hits);
+        PixabayApiService.resetPage();
+        PixabayApiService.incrementPage();
+        observer.observe(sentinel);
 
-      Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
-    });
+        Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
+      })
+      .catch(() => {
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      });
   }
 }
 
 function appendImagesMarkup(images) {
-  const galleryItem = images.hits
+  const galleryItem = images
     .map(
       ({
         webformatURL,
@@ -95,7 +101,9 @@ const onEntry = entries => {
     if (entry.isIntersecting && PixabayApiService.query !== '') {
       console.log('Loading more');
       PixabayApiService.incrementPage();
-      PixabayApiService.fetchPictures().then(appendImagesMarkup);
+      PixabayApiService.fetchPictures().then(images => {
+        appendImagesMarkup(images.hits);
+      });
     }
   });
 };

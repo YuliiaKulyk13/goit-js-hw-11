@@ -31,34 +31,33 @@ function onSearch(e) {
     PixabayApiService.resetPage();
     clearContainer();
     return;
+  } else {
+    PixabayApiService.fetchPictures().then(appendImagesMarkup);
+    appendImagesMarkup(hits);
+    PixabayApiService.resetPage();
+    PixabayApiService.incrementPage();
+    observer.observe(sentinel);
+
+    Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
   }
 
-  PixabayApiService.fetchPictures().then(hits => {
-    clearContainer();
-    appendImagesMarkup(hits);
-  });
-  // if (!PixabayApiService.query) {
-  //   return;
-  // }
-  //   PixabayApiService.resetPage();
-  //   PixabayApiService.fetchPictures().then(data => {
-  //     if (data.length === 0 || PixabayApiService.query === '') {
-  //
-  //       PixabayApiService.resetPage();
-  //       clearContainer();
-  //       return;
-  //     } else {
-  //       PixabayApiService.fetchPictures().then(appendImagesMarkup);
-  //       // appendImagesMarkup(data);
-  //       PixabayApiService.resetPage();
-  //       PixabayApiService.incrementPage();
-  //       observer.observe(sentinel);
-
-  //       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-  //     }
-  //   });
-  //
+  // PixabayApiService.fetchPictures().then(hits => {
+  //   clearContainer();
+  //   appendImagesMarkup(hits);
 }
+
+// if (!PixabayApiService.query) {
+//   return;
+// }
+//   PixabayApiService.resetPage();
+//   PixabayApiService.fetchPictures().then(data => {
+//     if (data.length === 0 || PixabayApiService.query === '') {
+//
+//       PixabayApiService.resetPage();
+//       clearContainer();
+//       return;
+//
+//
 
 function appendImagesMarkup(hits) {
   const galleryItem = hits
@@ -111,7 +110,6 @@ const onEntry = entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting && PixabayApiService.query !== '') {
       console.log('Loading more');
-      PixabayApiService.resetPage();
       PixabayApiService.incrementPage();
       PixabayApiService.fetchPictures().then(appendImagesMarkup);
     }

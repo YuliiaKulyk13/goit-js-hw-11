@@ -7,17 +7,16 @@ export default class PixabayApiService {
   }
 
   fetchPictures() {
-    console.log(this);
     const URL = `https://pixabay.com/api/?key=33700008-b0f3fc2623c0687ada0dd2d9b&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`;
+    // return fetch(URL);
     return fetch(URL)
-      .then(response => response.json())
+      .then(r => r.json())
       .then(data => {
         this.incrementPage();
-
         return data.hits;
       });
-
-    // return axios.get(url);
+    // const response = await axios.get(URL);
+    // const data = await response.json();
   }
 
   incrementPage() {

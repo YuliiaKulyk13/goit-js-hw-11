@@ -22,11 +22,11 @@ button {
   justify-content: center;
 }
 
-#sentinel {
+/* #sentinel {
   width: 500px;
   height: 500px;
   background-color: tomato;
-}
+} */
 
 .search-input {
   padding: 5px 10px;

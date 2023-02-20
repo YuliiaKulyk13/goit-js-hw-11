@@ -1,10 +1,13 @@
-import '../css/style.css';
 import PixabayApiServise from './pixabay-service';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import '../css/style.css';
 
 const PixabayApiService = new PixabayApiServise();
+const lightbox = new SimpleLightbox('.gallery a');
+
+console.log(PixabayApiService);
 
 const searchForm = document.querySelector('.search-form');
 const searchInput = document.querySelector('.search-input');
@@ -14,37 +17,51 @@ const sentinel = document.querySelector('#sentinel');
 function onSearch(e) {
   e.preventDefault();
 
-  // clearContainer();
+  // if (PixabayApiService.query !== searchInput.value.trim()) {
+  //   console.log(PixabayApiService.query !== searchInput.value.trim());
+  //   PixabayApiService.resetPage();
+  // }
+
   PixabayApiService.query = searchInput.value;
-  PixabayApiService.resetPage();
-  PixabayApiService.fetchPictures().then(data => {
-    if (data.length === 0 || PixabayApiService.query === '') {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-      PixabayApiService.resetPage();
-      clearContainer();
-      return;
-    } else {
-      PixabayApiService.fetchPictures().then(appendImagesMarkup);
-      PixabayApiService.resetPage();
-      PixabayApiService.incrementPage();
 
-      Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-      // const { height: cardHeight } = document
-      //   .querySelector('.gallery')
-      //   .firstElementChild.getBoundingClientRect();
+  if (PixabayApiService.query === '') {
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    PixabayApiService.resetPage();
+    clearContainer();
+    return;
+  }
 
-      // window.scrollBy({
-      //   top: cardHeight * 2,
-      //   behavior: 'smooth',
-      // });
-    }
+  PixabayApiService.fetchPictures().then(hits => {
+    clearContainer();
+    appendImagesMarkup(hits);
   });
+  // if (!PixabayApiService.query) {
+  //   return;
+  // }
+  //   PixabayApiService.resetPage();
+  //   PixabayApiService.fetchPictures().then(data => {
+  //     if (data.length === 0 || PixabayApiService.query === '') {
+  //
+  //       PixabayApiService.resetPage();
+  //       clearContainer();
+  //       return;
+  //     } else {
+  //       PixabayApiService.fetchPictures().then(appendImagesMarkup);
+  //       // appendImagesMarkup(data);
+  //       PixabayApiService.resetPage();
+  //       PixabayApiService.incrementPage();
+  //       observer.observe(sentinel);
+
+  //       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+  //     }
+  //   });
+  //
 }
 
-function appendImagesMarkup(query) {
-  const galleryItem = query
+function appendImagesMarkup(hits) {
+  const galleryItem = hits
     .map(
       ({
         webformatURL,
@@ -83,9 +100,8 @@ function appendImagesMarkup(query) {
     .join('');
   galleryList.insertAdjacentHTML('beforeend', galleryItem);
   lightbox.refresh();
+  smoothScroll();
 }
-
-const lightbox = new SimpleLightbox('.gallery a');
 
 function clearContainer() {
   galleryList.innerHTML = '';
@@ -109,21 +125,14 @@ const options = {
 const observer = new IntersectionObserver(onEntry, options);
 observer.observe(sentinel);
 
-// const pages = Math.round(totalHits / PixabayApiService.per_page);
-// if (PixabayApiService.page === pages) {
-//   Notiflix.Notify.failure(
-//     "We're sorry, but you've reached the end of search results."
-//   );
-//   observer.unobserve(sentinel);
-// }
-// function smoothScroll() {
-//   const { height: cardHeight } = document
-//     .querySelector('.gallery')
-//     .firstElementChild.getBoundingClientRect();
+function smoothScroll() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
 
-//   window.scrollBy({
-//     top: cardHeight * 2,
-//     behavior: 'smooth',
-//   });
-// }
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
+}
 searchForm.addEventListener('submit', onSearch);

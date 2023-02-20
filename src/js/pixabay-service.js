@@ -4,11 +4,19 @@ export default class PixabayApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
+    this.per_page = 40;
   }
 
   async fetchPictures() {
-    const URL = `https://pixabay.com/api/?key=33700008-b0f3fc2623c0687ada0dd2d9b&q=${this.searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`;
-
+    const searchParams = new URLSearchParams({
+      key: '33700008-b0f3fc2623c0687ada0dd2d9b',
+      q: `${this.searchQuery}`,
+      image_type: 'horizontal',
+      safesearch: true,
+      per_page: `${this.per_page}`,
+      page: `${this.page}`,
+    });
+    const URL = `https://pixabay.com/api/?${searchParams}`;
     return await axios.get(URL).then(response => {
       if (response.status !== 200 || response.data.hits.length === 0) {
         throw new Error(response.status);
@@ -19,11 +27,11 @@ export default class PixabayApiService {
   }
 
   incrementPage() {
-    this.page += 1;
+    return (this.page += 1);
   }
 
   resetPage() {
-    this.page = 1;
+    return (this.page = 1);
   }
 
   get query() {
@@ -33,4 +41,16 @@ export default class PixabayApiService {
   set query(newQuery) {
     this.searchQuery = newQuery;
   }
+
+  // setTotal(total) {
+  //   return (this.totalPages = total);
+  // }
+
+  // resetTotal() {
+  //   return this.totalPages - 0;
+  // }
+
+  // endOfImages() {
+  //   return this.page === Math.ceil(this.totalPages / this.per_page);
+  // }
 }

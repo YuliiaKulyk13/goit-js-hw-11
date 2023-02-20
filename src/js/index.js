@@ -14,13 +14,14 @@ const searchInput = document.querySelector('.search-input');
 const galleryList = document.querySelector('.gallery');
 const sentinel = document.querySelector('#sentinel');
 
+let totalHits = 0;
+
 function onSearch(e) {
   e.preventDefault();
 
-  // if (PixabayApiService.query !== searchInput.value.trim()) {
-  //   console.log(PixabayApiService.query !== searchInput.value.trim());
-  //   PixabayApiService.resetPage();
-  // }
+  observer.observe(sentinel);
+  PixabayApiService.resetPage();
+  clearContainer();
 
   PixabayApiService.query = searchInput.value;
 
@@ -34,9 +35,11 @@ function onSearch(e) {
   } else {
     PixabayApiService.fetchPictures()
       .then(images => {
+        totalHits = images.totalHits;
         appendImagesMarkup(images.hits);
-        PixabayApiService.resetPage();
         PixabayApiService.incrementPage();
+        PixabayApiService.resetPage();
+
         observer.observe(sentinel);
 
         Notiflix.Notify.success(`Hooray! We found ${images.totalHits} images.`);
@@ -99,10 +102,17 @@ function clearContainer() {
 const onEntry = entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting && PixabayApiService.query !== '') {
-      console.log('Loading more');
       PixabayApiService.incrementPage();
       PixabayApiService.fetchPictures().then(images => {
         appendImagesMarkup(images.hits);
+
+        if (images.hits.length === images.total) {
+          Notiflix.Notify.info(
+            "We're sorry, but you've reached the end of search results."
+          );
+
+          observer.unobserve(sentinel);
+        }
       });
     }
   });
@@ -125,4 +135,5 @@ function smoothScroll() {
     behavior: 'smooth',
   });
 }
+
 searchForm.addEventListener('submit', onSearch);

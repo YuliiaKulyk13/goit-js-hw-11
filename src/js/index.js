@@ -103,17 +103,17 @@ const onEntry = entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting && PixabayApiService.query !== '') {
       PixabayApiService.incrementPage();
-      PixabayApiService.fetchPictures().then(images => {
-        appendImagesMarkup(images.hits);
-
-        if (images.hits.length === images.total) {
+      PixabayApiService.fetchPictures()
+        .then(images => {
+          appendImagesMarkup(images.hits);
+        })
+        .catch(() => {
           Notiflix.Notify.info(
             "We're sorry, but you've reached the end of search results."
           );
 
           observer.unobserve(sentinel);
-        }
-      });
+        });
     }
   });
 };

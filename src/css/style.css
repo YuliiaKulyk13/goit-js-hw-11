@@ -1,6 +1,14 @@
-section {
-  background-color: rgb(224, 178, 224);
+body {
+  margin: 0;
+  position: relative;
 }
+
+.header {
+  position: fixed;
+  background-color: rgb(224, 178, 224);
+  width: 100%;
+}
+
 .container {
   width: 1170px;
   padding-left: 15px;
